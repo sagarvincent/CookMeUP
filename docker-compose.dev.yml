@@ -53,6 +53,22 @@ services:
       - ACCESS_TOKEN_SECRET=dev_access_secret_change_me
       - CORS_ORIGIN=http://localhost:5173
 
+  pantry:
+    build:
+      context: ./API/pantry
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./API/pantry/src:/app/src
+      - pantry_data:/app/data
+    environment:
+      - PORT=3003
+      - NODE_ENV=development
+      - ACCESS_TOKEN_SECRET=dev_access_secret_change_me
+      - CORS_ORIGIN=http://localhost:5173
+
 volumes:
   auth_data:
   recipes_data:
+  pantry_data:

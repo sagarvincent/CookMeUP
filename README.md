@@ -43,6 +43,7 @@ cd UI       && npm run dev:cluster                # frontend on :5173
 |---|---|---|---|
 | Auth & Identity | `API/auth/` | 3001 | ✅ Built |
 | Recipe Catalogue | `API/recipes/` | 3002 | ✅ Built |
+| Pantry / Inventory | `API/pantry/` | 3003 | ✅ Built |
 
 **Stack:** Node.js · Express · SQLite (`better-sqlite3`) · JWT HS256 · bcrypt
 
@@ -80,6 +81,23 @@ See `API/auth/.env.example` for environment variables.
 **Sort values:** `rating` (default) · `time` · `cooked` · `kcal` · `ratings`
 
 See `API/recipes/.env.example` for environment variables. `ACCESS_TOKEN_SECRET` must match the auth service.
+
+### Pantry / Inventory endpoints (`API/pantry/` · port 3003)
+
+All endpoints require Bearer token — pantry data is per-user.
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/pantry` | Full list — query params: `q` (name search), `category` |
+| POST | `/pantry` | Add item `{ name, qty, unit, category, expires }` |
+| GET | `/pantry/:id` | Single item |
+| PUT | `/pantry/:id` | Replace item |
+| DELETE | `/pantry/:id` | Remove item |
+| PATCH | `/pantry/:id/qty` | Delta adjust `{ delta: ±0.5 }` — clamps to ≥ 0 |
+| POST | `/pantry/bulk-import` | JSON array or CSV string — upserts by name |
+| POST | `/pantry/decrement` | `[{ name, qty }]` — batch-decrement after a cook |
+
+See `API/pantry/.env.example` for environment variables.
 
 ---
 
