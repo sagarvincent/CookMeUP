@@ -38,5 +38,21 @@ services:
       - REFRESH_TOKEN_TTL=2592000
       - CORS_ORIGIN=http://localhost:5173
 
+  recipes:
+    build:
+      context: ./API/recipes
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./API/recipes/src:/app/src
+      - recipes_data:/app/data
+    environment:
+      - PORT=3002
+      - NODE_ENV=development
+      - ACCESS_TOKEN_SECRET=dev_access_secret_change_me
+      - CORS_ORIGIN=http://localhost:5173
+
 volumes:
   auth_data:
+  recipes_data:

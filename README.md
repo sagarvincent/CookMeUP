@@ -39,17 +39,18 @@ cd UI       && npm run dev:cluster                # frontend on :5173
 
 ### What's live
 
-| Service | Location | Status |
-|---|---|---|
-| Auth & Identity | `API/auth/` | ✅ Built |
+| Service | Location | Port | Status |
+|---|---|---|---|
+| Auth & Identity | `API/auth/` | 3001 | ✅ Built |
+| Recipe Catalogue | `API/recipes/` | 3002 | ✅ Built |
 
 **Stack:** Node.js · Express · SQLite (`better-sqlite3`) · JWT HS256 · bcrypt
 
-**Databases:** `Databases/Auth/init.sql` (users, refresh tokens) · `Databases/Profile/init.sql` (user preferences)
+**Databases:** `Databases/Auth/init.sql` · `Databases/Profile/init.sql` · `Databases/Recipes/init.sql`
 
 **Demo credentials:** `demo@mise-and-plate.com` / `password123`
 
-### Auth endpoints
+### Auth endpoints (`API/auth/` · port 3001)
 
 | Method | Path | Auth | Description |
 |---|---|---|---|
@@ -62,20 +63,23 @@ cd UI       && npm run dev:cluster                # frontend on :5173
 | PUT | `/users/me/preferences` | Bearer | Save onboarding prefs |
 | GET | `/data/bootstrap` | — | All seed data in one shot |
 
-### API environment variables
+See `API/auth/.env.example` for environment variables.
 
-```bash
-PORT=3001
-ACCESS_TOKEN_SECRET=...      # change in production
-REFRESH_TOKEN_SECRET=...     # change in production
-ACCESS_TOKEN_TTL=900         # 15 min
-REFRESH_TOKEN_TTL=2592000    # 30 days
-CORS_ORIGIN=http://localhost:5173
-AUTH_DB_PATH=../../data/auth.db
-PROFILE_DB_PATH=../../data/profile.db
-```
+### Recipe Catalogue endpoints (`API/recipes/` · port 3002)
 
-See `API/auth/.env.example` for all variables.
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| GET | `/recipes` | — | Paginated list — query params: `q`, `cuisine`, `course`, `diet`, `sort`, `page`, `limit` |
+| GET | `/recipes/featured` | — | Editor's pick recipe |
+| GET | `/recipes/random` | — | Random recipe, accepts same filter params |
+| GET | `/recipes/:id` | — | Full recipe detail |
+| POST | `/recipes` | Bearer | Create recipe (admin) |
+| PUT | `/recipes/:id` | Bearer | Update recipe (admin) |
+| DELETE | `/recipes/:id` | Bearer | Delete recipe (admin) |
+
+**Sort values:** `rating` (default) · `time` · `cooked` · `kcal` · `ratings`
+
+See `API/recipes/.env.example` for environment variables. `ACCESS_TOKEN_SECRET` must match the auth service.
 
 ---
 
