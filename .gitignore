@@ -4,3 +4,9 @@ dist/
 .env.dev_cluster
 .env.production
 *.local
+
+# SQLite runtime data
+*.db
+*.db-shm
+*.db-wal
+API/data/
