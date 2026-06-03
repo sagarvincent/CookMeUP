@@ -44,10 +44,11 @@ cd UI       && npm run dev:cluster                # frontend on :5173
 | Auth & Identity | `API/auth/` | 3001 | ✅ Built |
 | Recipe Catalogue | `API/recipes/` | 3002 | ✅ Built |
 | Pantry / Inventory | `API/pantry/` | 3003 | ✅ Built |
+| Diet Plan | `API/diet-plan/` | 3004 | ✅ Built |
 
 **Stack:** Node.js · Express · SQLite (`better-sqlite3`) · JWT HS256 · bcrypt
 
-**Databases:** `Databases/Auth/init.sql` · `Databases/Profile/init.sql` · `Databases/Recipes/init.sql`
+**Databases:** `Databases/Auth/init.sql` · `Databases/Profile/init.sql` · `Databases/Recipes/init.sql` · `Databases/Pantry/init.sql` · `Databases/DietPlan/init.sql`
 
 **Demo credentials:** `demo@mise-and-plate.com` / `password123`
 
@@ -98,6 +99,26 @@ All endpoints require Bearer token — pantry data is per-user.
 | POST | `/pantry/decrement` | `[{ name, qty }]` — batch-decrement after a cook |
 
 See `API/pantry/.env.example` for environment variables.
+
+### Diet Plan endpoints (`API/diet-plan/` · port 3004)
+
+All endpoints require Bearer token — plans are per-user.
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/diet-plan?week=2026-W23` | Load plan for the week — always returns full 7×3 skeleton |
+| PUT | `/diet-plan?week=2026-W23` | Save full week `{ Mon: { Breakfast: recipeId\|null, … }, … }` |
+| PATCH | `/diet-plan/:week/:day/:meal` | Swap single slot `{ recipeId }` — day: Mon–Sun, meal: Breakfast/Lunch/Dinner |
+| GET | `/users/me/macro-targets` | Load saved kcal/macro goals |
+| PUT | `/users/me/macro-targets` | Save goals `{ preset?, kcal, protein_g, carbs_g, fat_g }` |
+| POST | `/diet-plan/auto-fill?week=...` | Fill empty slots from recipes service — body `{ diet?, cuisine?, overwrite? }` |
+| GET | `/diet-plan/calendar-export?week=...` | Download `.ics` file for the week |
+
+**Macro presets:** `High protein` · `Low carb` · `Mediterranean` · `Custom`
+
+**Auto-fill** calls the recipes service (`RECIPES_API_BASE` env) to fetch a pool of recipes matching the given filters, then randomly assigns them to empty slots.
+
+See `API/diet-plan/.env.example` for environment variables. `ACCESS_TOKEN_SECRET` must match the auth service.
 
 ---
 
