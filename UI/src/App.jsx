@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { loadAllData } from './services/dataService.js';
 import { seedPlan } from './layers/L3_composite/dietPlanOps.js';
+import { useAuth } from './layers/L2_business/useAuth.js';
 import { Sidebar } from './components/shared/Shell.jsx';
+import AuthScreen from './components/screens/AuthScreen.jsx';
 import IntakeScreen from './components/screens/IntakeScreen.jsx';
 import HomeScreen from './components/screens/HomeScreen.jsx';
 import RecipeScreen from './components/screens/RecipeScreen.jsx';
@@ -29,8 +31,11 @@ function LoadingScreen() {
 // ─────────────────────── App ─────────────── START ──────────────────
 // calls:     services/dataService: loadAllData
 //            L3/dietPlanOps: seedPlan
+//            L2/useAuth: user, loading, isLoggedIn, login, register, error, clearError
 // called by: main.jsx (React root)
 export default function App() {
+  const { user, loading: authLoading, isLoggedIn, login, register, error: authError, clearError } = useAuth();
+
   const [appData,       setAppData]       = useState(null);
   const [route,         setRoute]         = useState('intake');
   const [recipe,        setRecipe]        = useState(null);
@@ -45,7 +50,10 @@ export default function App() {
     });
   }, []);
 
-  if (!appData || !recipe || !plan) return <LoadingScreen/>;
+  if (!appData || !recipe || !plan || authLoading) return <LoadingScreen/>;
+
+  // Show auth screen until the user is logged in
+  if (!isLoggedIn) return <AuthScreen login={login} register={register} error={authError} clearError={clearError}/>;
 
   const openRecipe  = (r) => { setRecipe(r); setRoute('recipe'); };
   const openCooking = () => setRoute('cooking');

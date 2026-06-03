@@ -1,17 +1,42 @@
 version: "3.8"
 
 services:
+
   frontend:
     build:
       context: ./UI
       dockerfile: Dockerfile
       target: builder
     working_dir: /app
-    command: npm run dev:local -- --host 0.0.0.0
+    command: npm run dev:cluster -- --host 0.0.0.0
     ports:
       - "5173:5173"
     volumes:
       - ./UI/src:/app/src
       - /app/node_modules
     environment:
-      - VITE_APP_ENV=dev_local
+      - VITE_APP_ENV=dev_cluster
+      - VITE_API_BASE=http://localhost:3001
+    depends_on:
+      - auth
+
+  auth:
+    build:
+      context: ./API/auth
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./API/auth/src:/app/src
+      - auth_data:/app/data
+    environment:
+      - PORT=3001
+      - NODE_ENV=development
+      - ACCESS_TOKEN_SECRET=dev_access_secret_change_me
+      - REFRESH_TOKEN_SECRET=dev_refresh_secret_change_me
+      - ACCESS_TOKEN_TTL=900
+      - REFRESH_TOKEN_TTL=2592000
+      - CORS_ORIGIN=http://localhost:5173
+
+volumes:
+  auth_data:

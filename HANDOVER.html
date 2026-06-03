@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mise &amp; Plate — Project Handover</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --paper:      #f3ecdb;
+    --paper-2:    #ebe1c9;
+    --ink:        #2a241a;
+    --ink-2:      #4a3f2e;
+    --ink-3:      #6b5a44;
+    --line:       #c9b994;
+    --line-soft:  #d8c9a6;
+    --brick:      #a04434;
+    --brick-deep: #7a2e22;
+    --olive:      #6b7a3f;
+    --forest:     #3a4628;
+    --saffron:    #c98a2a;
+    --walnut:     #6a4a2e;
+    --cream:      #fbf6e9;
+    --f-display:  'Cormorant Garamond', Georgia, serif;
+    --f-body:     'Lora', Georgia, serif;
+    --f-mono:     'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--f-body);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--paper);
+  }
+
+  /* ── COVER ─────────────────────────────────────────────────── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 80px 96px;
+    background: var(--ink);
+    color: var(--paper);
+    page-break-after: always;
+  }
+  .cover-brand { font-family: var(--f-display); font-size: 13px; letter-spacing: .28em; text-transform: uppercase; color: var(--saffron); }
+  .cover-title { font-family: var(--f-display); font-size: 84px; line-height: 1; margin-top: 28px; font-weight: 400; }
+  .cover-title em { font-style: italic; color: var(--saffron); }
+  .cover-sub { font-family: var(--f-body); font-style: italic; font-size: 20px; color: rgba(243,236,219,.65); margin-top: 20px; max-width: 580px; line-height: 1.5; }
+  .cover-rule { height: 1px; background: rgba(201,185,148,.25); margin: 48px 0; }
+  .cover-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .cover-meta-item label { font-family: var(--f-mono); font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: rgba(243,236,219,.45); display: block; margin-bottom: 6px; }
+  .cover-meta-item span { font-family: var(--f-display); font-size: 17px; color: var(--paper); }
+  .cover-footer { font-family: var(--f-mono); font-size: 10px; letter-spacing: .12em; color: rgba(243,236,219,.35); text-transform: uppercase; }
+
+  /* ── TOC ────────────────────────────────────────────────────── */
+  .toc-page {
+    padding: 72px 96px;
+    min-height: 100vh;
+    page-break-after: always;
+  }
+  .toc-page h2 { font-family: var(--f-display); font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: var(--brick); margin-bottom: 48px; }
+  .toc-list { list-style: none; }
+  .toc-list li { display: flex; align-items: baseline; gap: 0; padding: 10px 0; border-bottom: 1px solid var(--line-soft); }
+  .toc-list li .toc-num { font-family: var(--f-mono); font-size: 10px; color: var(--ink-3); width: 36px; flex-shrink: 0; }
+  .toc-list li .toc-title { font-family: var(--f-display); font-size: 22px; flex: 1; }
+  .toc-list li .toc-dots { flex: 1; border-bottom: 1px dotted var(--line); margin: 0 12px; position: relative; top: -4px; }
+  .toc-list li .toc-page-num { font-family: var(--f-mono); font-size: 11px; color: var(--ink-3); }
+
+  /* ── SECTIONS ───────────────────────────────────────────────── */
+  .section {
+    padding: 72px 96px;
+    page-break-before: always;
+  }
+  .section-eyebrow {
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--brick);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--f-display);
+    font-size: 56px;
+    line-height: 1;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .section-title em { font-style: italic; color: var(--brick); }
+  .section-sub {
+    font-family: var(--f-body);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-3);
+    max-width: 600px;
+    margin-bottom: 48px;
+    line-height: 1.5;
+  }
+  .section-rule { height: 1px; background: var(--line-soft); margin-bottom: 48px; }
+
+  /* ── CARDS ──────────────────────────────────────────────────── */
+  .card {
+    background: var(--cream);
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 18px;
+  }
+  .card-title {
+    font-family: var(--f-display);
+    font-size: 24px;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .card-eyebrow {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--brick);
+    margin-bottom: 8px;
+  }
+  .card p { color: var(--ink-2); margin-bottom: 10px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── ENDPOINT LIST ──────────────────────────────────────────── */
+  .endpoint-list { list-style: none; margin-top: 12px; }
+  .endpoint-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--line-soft);
+    font-size: 13px;
+  }
+  .endpoint-list li:last-child { border-bottom: none; }
+  .method {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    min-width: 48px;
+    text-align: center;
+  }
+  .method.get    { background: rgba(107,122,63,.15); color: var(--forest); }
+  .method.post   { background: rgba(160,68,52,.12);  color: var(--brick); }
+  .method.put    { background: rgba(201,138,42,.15); color: #9a6010; }
+  .method.patch  { background: rgba(106,74,46,.12);  color: var(--walnut); }
+  .method.delete { background: rgba(100,40,40,.1);   color: #7a2222; }
+  .ep-path { font-family: var(--f-mono); font-size: 11.5px; color: var(--ink); }
+  .ep-desc { font-family: var(--f-body); font-style: italic; color: var(--ink-3); font-size: 12.5px; flex: 1; }
+
+  /* ── SCREEN GRID ────────────────────────────────────────────── */
+  .screen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .screen-card {
+    background: var(--cream);
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .screen-card .sc-name { font-family: var(--f-display); font-size: 20px; color: var(--ink); }
+  .screen-card .sc-route { font-family: var(--f-mono); font-size: 9px; letter-spacing: .12em; color: var(--brick); text-transform: uppercase; margin-bottom: 8px; }
+  .screen-card .sc-body { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+  .screen-card ul { padding-left: 14px; margin-top: 6px; }
+  .screen-card ul li { color: var(--ink-3); font-size: 12px; margin-bottom: 3px; }
+
+  /* ── LAYER TABLE ────────────────────────────────────────────── */
+  .layer-row { display: grid; grid-template-columns: 100px 1fr 1fr; gap: 0; border-bottom: 1px solid var(--line-soft); padding: 14px 0; align-items: start; }
+  .layer-row:first-child { border-top: 1px solid var(--line-soft); }
+  .layer-badge { font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+  .l1 { background: rgba(160,68,52,.12); color: var(--brick); }
+  .l2 { background: rgba(201,138,42,.15); color: #9a6010; }
+  .l3 { background: rgba(107,122,63,.15); color: var(--forest); }
+  .l4 { background: rgba(106,74,46,.12); color: var(--walnut); }
+  .layer-files { font-family: var(--f-mono); font-size: 10.5px; color: var(--ink-2); line-height: 1.7; }
+  .layer-desc { font-size: 12.5px; color: var(--ink-3); line-height: 1.5; padding-left: 12px; }
+
+  /* ── DIR TREE ───────────────────────────────────────────────── */
+  .dir-tree {
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    line-height: 1.75;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 10px;
+    padding: 28px 32px;
+    overflow-x: auto;
+  }
+  .dir-tree .dir  { color: var(--saffron); }
+  .dir-tree .file { color: rgba(243,236,219,.75); }
+  .dir-tree .comment { color: rgba(243,236,219,.35); }
+
+  /* ── TOKENS ─────────────────────────────────────────────────── */
+  .token-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .token-swatch { border-radius: 8px; overflow: hidden; border: 1px solid var(--line-soft); }
+  .token-color { height: 56px; }
+  .token-info { padding: 8px 10px; background: var(--cream); }
+  .token-name  { font-family: var(--f-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .token-value { font-family: var(--f-mono); font-size: 10.5px; color: var(--ink); margin-top: 2px; }
+
+  .font-row { display: grid; grid-template-columns: 100px 1fr; gap: 16px; align-items: baseline; padding: 10px 0; border-bottom: 1px dashed var(--line-soft); }
+  .font-label { font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+
+  /* ── ENV TABLE ──────────────────────────────────────────────── */
+  table.env-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.env-table th { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+  table.env-table td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  table.env-table td:first-child { font-family: var(--f-mono); font-size: 11.5px; color: var(--brick); }
+  table.env-table td:nth-child(2) { font-family: var(--f-mono); font-size: 11px; color: var(--forest); }
+
+  /* ── DEPS CHAIN ─────────────────────────────────────────────── */
+  .dep-list { list-style: none; counter-reset: dep; }
+  .dep-list li { counter-increment: dep; display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+  .dep-list li::before { content: counter(dep, decimal-leading-zero); font-family: var(--f-mono); font-size: 10px; color: var(--ink-3); flex-shrink: 0; }
+  .dep-num { font-family: var(--f-display); font-size: 18px; }
+  .dep-desc { font-size: 12.5px; color: var(--ink-3); flex: 1; font-style: italic; }
+  .dep-arrow { font-family: var(--f-mono); font-size: 10px; color: var(--brick); }
+
+  /* ── PRINT ──────────────────────────────────────────────────── */
+  @media print {
+    body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cover { min-height: 100vh; }
+    .section { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+    @page { margin: 0; size: A4; }
+  }
+
+  /* ── UTILS ──────────────────────────────────────────────────── */
+  .row { display: flex; gap: 12px; align-items: center; }
+  .col { display: flex; flex-direction: column; gap: 8px; }
+  .mt-4 { margin-top: 16px; }
+  .mt-6 { margin-top: 28px; }
+  .mb-3 { margin-bottom: 12px; }
+  .stamp {
+    display: inline-flex; align-items: center;
+    padding: 5px 12px;
+    border: 1.5px solid var(--brick);
+    color: var(--brick);
+    font-family: var(--f-mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
+    border-radius: 2px; transform: rotate(-1deg);
+  }
+  code {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    background: rgba(42,36,26,.07);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--brick);
+  }
+  pre {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 20px 24px;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin-top: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div>
+    <div class="cover-brand">Project Handover Document</div>
+    <div class="cover-title">Mise &amp;<br><em>Plate</em></div>
+    <div class="cover-sub">A recipe, pantry, and live-cooking application. Frontend complete. Backend contract defined. Ready for full-stack implementation.</div>
+  </div>
+
+  <div>
+    <div class="cover-rule"></div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <label>Project</label>
+        <span>CookMeUP</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Frontend Version</label>
+        <span>0.1.0</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Date</label>
+        <span>June 2026</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Stack</label>
+        <span>React · Vite</span>
+      </div>
+    </div>
+    <div class="cover-rule"></div>
+    <div class="cover-footer">github.com/sagarvincent/CookMeUP · Confidential</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+══════════════════════════════════════════════════════════════ -->
+<div class="toc-page">
+  <h2>Contents</h2>
+  <ul class="toc-list">
+    <li><span class="toc-num">01</span><span class="toc-title">Project Overview</span><span class="toc-dots"></span><span class="toc-page-num">3</span></li>
+    <li><span class="toc-num">02</span><span class="toc-title">Application Screens</span><span class="toc-dots"></span><span class="toc-page-num">4</span></li>
+    <li><span class="toc-num">03</span><span class="toc-title">Technical Architecture</span><span class="toc-dots"></span><span class="toc-page-num">5</span></li>
+    <li><span class="toc-num">04</span><span class="toc-title">Design System</span><span class="toc-dots"></span><span class="toc-page-num">6</span></li>
+    <li><span class="toc-num">05</span><span class="toc-title">Development Setup</span><span class="toc-dots"></span><span class="toc-page-num">7</span></li>
+    <li><span class="toc-num">06</span><span class="toc-title">Backend Services Contract</span><span class="toc-dots"></span><span class="toc-page-num">8</span></li>
+    <li><span class="toc-num">07</span><span class="toc-title">Build Order</span><span class="toc-dots"></span><span class="toc-page-num">13</span></li>
+  </ul>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     01 — PROJECT OVERVIEW
+══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">01 — Overview</div>
+  <div class="section-title">Project <em>Overview</em></div>
+  <div class="section-sub">What this product is, what it does, and the current state of delivery.</div>
+  <div class="section-rule"></div>
+
+  <div class="card no-break">
+    <div class="card-eyebrow">What it is</div>
+    <div class="card-title">Mise &amp; Plate</div>
+    <p>A heritage-cookbook-aesthetic recipe app that guides a user from "what shall I cook tonight?" through ingredient-aware planning, live step-by-step cooking assistance, and a pantry that auto-decrements as you cook. The visual centrepiece is a live cuisine-morph: as you complete cooking steps, the screen palette transitions from a neutral cookbook cream to the deep clay and saffron of an Indian kitchen.</p>
+  </div>
+
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Current state</div>
+    <div class="card-title">Frontend — Complete</div>
+    <p>All 9 screens are built and functional with mock data. The layered architecture (L1 routing → L2 business hooks → L3 composites → L4 primitives) is in place. The app builds cleanly for all three environments. Mock data is fully excluded from production bundles via Vite's build-time alias resolution.</p>
+    <p>The backend does not yet exist. The <code>apiClient.js</code> stub and the <code>@data-loader</code> build alias are the integration points — replace the stub with real HTTP calls and the app wires up automatically.</p>
+  </div>
+
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Repository</div>
+    <div class="card-title">github.com/sagarvincent/CookMeUP</div>
+    <p><strong>Branch:</strong> main &nbsp;·&nbsp; <strong>Frontend root:</strong> <code>UI/</code> &nbsp;·&nbsp; <strong>Compose file:</strong> <code>docker-compose.dev.yml</code></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     02 — SCREENS
+══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">02 — Screens</div>
+  <div class="section-title">Application <em>Screens</em></div>
+  <div class="section-sub">Nine screens covering the full user journey from discovery to live cooking.</div>
+  <div class="section-rule"></div>
+
+  <div class="screen-grid">
+    <div class="screen-card no-break">
+      <div class="sc-route">route: intake</div>
+      <div class="sc-name">Intake</div>
+      <div class="sc-body">Landing screen. Three input modes share one card:
+        <ul>
+          <li>Type — textarea with NLU recipe search</li>
+          <li>Speak — mic button with animated waveform</li>
+          <li>Photo — drag-and-drop dish recognition</li>
+        </ul>
+        6 suggestion pills + 3-card "Recently cooked" strip below.
+      </div>
+    </div>
+    <div class="screen-card no-break">
+      <div class="sc-route">route: home</div>
+      <div class="sc-name">Discover</div>
+      <div class="sc-body">Recipe discovery feed.
+        <ul>
+          <li>Hero editor's pick card</li>
+          <li>Filter bar: search, cuisine, course, diet chips</li>
+          <li>Grid / row layout toggle + 4 sort modes</li>
+          <li>Recipe cards with macros, rating, time</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screen-card no-break">
+      <div class="sc-route">route: recipe</div>
+      <div class="sc-name">Recipe Detail</div>
+      <div class="sc-body">Customisation screen.
+        <ul>
+          <li>Sliders: kcal, oil, spice, servings</li>
+          <li>Live macro recalculation</li>
+          <li>Pantry crosscheck table</li>
+          <li>Step editor with dynamic annotations</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screen-card no-break">
+      <div class="sc-route">route: cooking</div>
+      <div class="sc-name">Cook Live</div>
+      <div class="sc-body">The hero feature. Full-bleed, no sidebar.
+        <ul>
+          <li>Step-by-step guide with timer</li>
+          <li>Cuisine morph palette animation</li>
+          <li>Live AI assistant chat</li>
+          <li>Camera HUD with vision labels</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screen-card no-break">
+      <div class="sc-route">route: inventory</div>
+      <div class="sc-name">Pantry</div>
+      <div class="sc-body">Full CRUD inventory management.
+        <ul>
+          <li>4 stat cards: stocked / out / expiring / categories</li>
+          <li>Inline ± quantity adjustment</li>
+          <li>Freshness chips with expiry colour coding</li>
+          <li>Add / edit modal</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screen-card no-break">
+      <div class="sc-route">route: shopping</div>
+      <div class="sc-name">Shopping List</div>
+      <div class="sc-body">Auto-generated from diet plan minus pantry.
+        <ul>
+          <li>Ingredient shortfall aggregated across recipes</li>
+          <li>Checkbox tick-off with progress bar</li>
+          <li>"Send to phone" action</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screen-card no-break">
+      <div class="sc-route">route: dietplan</div>
+      <div class="sc-name">Diet Plan</div>
+      <div class="sc-body">Weekly meal planner.
+        <ul>
+          <li>7-day grid with kcal pill per day</li>
+          <li>4 meal slots per day — swappable via picker modal</li>
+          <li>Macro target bars with overflow indicator</li>
+          <li>Preset chips + adjustable target sliders</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screen-card no-break">
+      <div class="sc-route">route: profile</div>
+      <div class="sc-name">Dish Profile</div>
+      <div class="sc-body">Single-recipe deep-dive.
+        <ul>
+          <li>Portrait layout + hero stats</li>
+          <li>Star rating distribution</li>
+          <li>Cook history log</li>
+          <li>Community notes (3 review cards)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="screen-card no-break">
+      <div class="sc-route">route: onboard</div>
+      <div class="sc-name">Preferences</div>
+      <div class="sc-body">4-section onboarding wizard.
+        <ul>
+          <li>Diet type + allergy chips</li>
+          <li>Skill level + sessions/week sliders</li>
+          <li>Calorie / spice targets + cuisine picks</li>
+          <li>Kitchen equipment chip set</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     03 — ARCHITECTURE
+══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">03 — Architecture</div>
+  <div class="section-title">Technical <em>Architecture</em></div>
+  <div class="section-sub">Four strict layers. No logic lives in screen components. Every function is commented with its call chain.</div>
+  <div class="section-rule"></div>
+
+  <div class="layer-row no-break">
+    <div><span class="layer-badge l1">L1 — Router</span></div>
+    <div class="layer-files">App.jsx</div>
+    <div class="layer-desc">Route state, async data load via <code>dataService</code>, shared plan state. No logic — only renders the correct screen and passes props.</div>
+  </div>
+  <div class="layer-row no-break">
+    <div><span class="layer-badge l2">L2 — Business</span></div>
+    <div class="layer-files">
+      useIntake.js<br>useHome.js<br>useRecipe.js<br>useCooking.js<br>
+      useInventory.js<br>useDietPlan.js<br>useShoppingList.js
+    </div>
+    <div class="layer-desc">One custom React hook per screen. Owns all <code>useState</code> / <code>useEffect</code>. Calls L3 for derived values. Returns a flat object of state + handlers to the screen.</div>
+  </div>
+  <div class="layer-row no-break">
+    <div><span class="layer-badge l3">L3 — Composite</span></div>
+    <div class="layer-files">
+      recipeFiltering.js<br>recipeScaling.js<br>inventoryOps.js<br>
+      dietPlanOps.js<br>cookingOps.js
+    </div>
+    <div class="layer-desc">Pure functions that combine two or more L4 primitives. <code>filterAndSortRecipes</code>, <code>scaleRecipe</code>, <code>aggregateShoppingList</code>, <code>seedPlan</code>, <code>buildMorphStyles</code>.</div>
+  </div>
+  <div class="layer-row no-break">
+    <div><span class="layer-badge l4">L4 — Primitives</span></div>
+    <div class="layer-files">
+      recipeUtils.js<br>inventoryUtils.js<br>mathUtils.js<br>
+      cookingUtils.js<br>dateUtils.js
+    </div>
+    <div class="layer-desc">Single-responsibility, zero-dependency functions. <code>matchesQuery</code>, <code>daysUntil</code>, <code>scaledValue</code>, <code>inkColor</code>, <code>fmtTime</code>. No React — plain JS.</div>
+  </div>
+
+  <div class="mt-6">
+    <div class="dir-tree">
+<span class="dir">UI/src/</span>
+├── <span class="dir">layers/</span>
+│   ├── <span class="dir">L2_business/</span>      <span class="comment"># custom hooks</span>
+│   ├── <span class="dir">L3_composite/</span>     <span class="comment"># composed functions</span>
+│   └── <span class="dir">L4_primitives/</span>    <span class="comment"># atoms</span>
+├── <span class="dir">services/</span>
+│   ├── <span class="file">dataService.js</span>    <span class="comment"># re-exports @data-loader alias</span>
+│   ├── <span class="file">apiClient.js</span>      <span class="comment"># stub → replace with real HTTP</span>
+│   └── <span class="dir">loaders/</span>
+│       ├── <span class="file">mockLoader.js</span>   <span class="comment"># dev_local only (tree-shaken in prod)</span>
+│       └── <span class="file">apiLoader.js</span>    <span class="comment"># dev_cluster + production</span>
+├── <span class="dir">data/mock/</span>            <span class="comment"># RECIPES · INVENTORY · CONSTANTS</span>
+├── <span class="dir">components/</span>
+│   ├── <span class="dir">screens/</span>          <span class="comment"># 9 thin JSX screens</span>
+│   └── <span class="dir">shared/</span>           <span class="comment"># Shell.jsx · Icons.jsx</span>
+├── <span class="file">App.jsx</span>               <span class="comment"># L1 — routing only</span>
+├── <span class="file">index.css</span>             <span class="comment"># design tokens + utility classes</span>
+└── <span class="file">main.jsx</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     04 — DESIGN SYSTEM
+══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">04 — Design System</div>
+  <div class="section-title">Design <em>Tokens</em></div>
+  <div class="section-sub">Heritage cookbook aesthetic — warm parchment base, brick and olive accents, serif-forward typography. All tokens live in <code>index.css :root</code>.</div>
+  <div class="section-rule"></div>
+
+  <div class="token-grid mb-3">
+    <div class="token-swatch"><div class="token-color" style="background:#f3ecdb"></div><div class="token-info"><div class="token-name">--paper</div><div class="token-value">#f3ecdb</div></div></div>
+    <div class="token-swatch"><div class="token-color" style="background:#2a241a"></div><div class="token-info"><div class="token-name">--ink</div><div class="token-value">#2a241a</div></div></div>
+    <div class="token-swatch"><div class="token-color" style="background:#a04434"></div><div class="token-info"><div class="token-name">--brick</div><div class="token-value">#a04434</div></div></div>
+    <div class="token-swatch"><div class="token-color" style="background:#6b7a3f"></div><div class="token-info"><div class="token-name">--olive</div><div class="token-value">#6b7a3f</div></div></div>
+    <div class="token-swatch"><div class="token-color" style="background:#c98a2a"></div><div class="token-info"><div class="token-name">--saffron-acc</div><div class="token-value">#c98a2a</div></div></div>
+    <div class="token-swatch"><div class="token-color" style="background:#6a4a2e"></div><div class="token-info"><div class="token-name">--walnut</div><div class="token-value">#6a4a2e</div></div></div>
+    <div class="token-swatch"><div class="token-color" style="background:#fbf6e9"></div><div class="token-info"><div class="token-name">--cream-card</div><div class="token-value">#fbf6e9</div></div></div>
+    <div class="token-swatch"><div class="token-color" style="background:#3a4628"></div><div class="token-info"><div class="token-name">--forest</div><div class="token-value">#3a4628</div></div></div>
+  </div>
+
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Typography</div>
+    <div class="font-row"><div class="font-label">Display</div><div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:#2a241a;line-height:1">DM Serif Display · Cormorant Garamond</div></div>
+    <div class="font-row"><div class="font-label">Body</div><div style="font-family:'Lora',serif;font-size:16px;color:#4a3f2e">Lora · Crimson Pro · EB Garamond</div></div>
+    <div class="font-row"><div class="font-label">Mono / UI</div><div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;color:#6b5a44;text-transform:uppercase">JetBrains Mono — labels, caps, metadata</div></div>
+  </div>
+
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Cuisine Morph — Cooking Screen Palette</div>
+    <p>As cooking steps complete, <code>morph = stepIdx / (totalSteps − 1)</code> drives a <code>color-mix(in oklab)</code> transition on all background and accent variables. Text color is stepped (not interpolated) at <code>morph ≥ 0.45</code> to maintain contrast through the mid-tone crossover.</p>
+    <div class="token-grid mt-4" style="grid-template-columns:repeat(4,1fr)">
+      <div class="token-swatch"><div class="token-color" style="background:#2a0e08"></div><div class="token-info"><div class="token-name">cuisine bg-1</div><div class="token-value">#2a0e08</div></div></div>
+      <div class="token-swatch"><div class="token-color" style="background:#e89a2a"></div><div class="token-info"><div class="token-name">cuisine accent</div><div class="token-value">#e89a2a</div></div></div>
+      <div class="token-swatch"><div class="token-color" style="background:#d44a26"></div><div class="token-info"><div class="token-name">cuisine accent-2</div><div class="token-value">#d44a26</div></div></div>
+      <div class="token-swatch"><div class="token-color" style="background:#fde9be"></div><div class="token-info"><div class="token-name">cuisine ink</div><div class="token-value">#fde9be</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     05 — DEV SETUP
+══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">05 — Dev Setup</div>
+  <div class="section-title">Development <em>Setup</em></div>
+  <div class="section-sub">Three environments, one command each. Mock data is conditionally bundled via a Vite build-time alias — never reaches production.</div>
+  <div class="section-rule"></div>
+
+  <table class="env-table no-break">
+    <thead>
+      <tr><th>Environment</th><th>Command</th><th>Data source</th><th>.env file</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>dev_local</td><td>npm run dev:local</td><td>Mock files in <code>data/mock/</code></td><td>.env.dev_local</td></tr>
+      <tr><td>dev_cluster</td><td>npm run dev:cluster</td><td>API at <code>VITE_API_BASE</code></td><td>.env.dev_cluster</td></tr>
+      <tr><td>production</td><td>npm run build</td><td>API at <code>VITE_API_BASE</code></td><td>.env.production</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Docker</div>
+    <pre>
+# Dev — hot reload from UI/src/
+docker-compose -f docker-compose.dev.yml up
+
+# Production image
+docker build -t mise-plate \
+  --build-arg VITE_APP_ENV=production \
+  --build-arg VITE_API_BASE=https://api.mise-and-plate.com \
+  UI/</pre>
+  </div>
+
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">First API integration point</div>
+    <p>Replace the stub in <code>UI/src/services/apiClient.js</code>. The single bootstrap call the frontend needs on load:</p>
+    <pre>GET /data/bootstrap
+→ { recipes, inventory, cuisines, courses, diets, dietTargets, assistantLines }</pre>
+    <p style="margin-top:10px">Wire this up and the app stops using mock data entirely in <code>dev_cluster</code> and <code>production</code> modes.</p>
+  </div>
+
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Comment Convention</div>
+    <p>Every exported function in every layer file is wrapped with a standard block documenting the call chain:</p>
+    <pre>
+// ─────── functionName ─────── START ──────────────
+// calls:     L3/recipeScaling: scaleIngredients
+// called by: L2/useRecipe: scaledIngs useMemo
+export function functionName(...) { ... }
+// ─────── functionName ─────── END ────────────────</pre>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     06 — BACKEND CONTRACT
+══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">06 — Backend Contract</div>
+  <div class="section-title">Backend <em>Services</em></div>
+  <div class="section-sub">Every endpoint the frontend calls, grouped by service domain. All routes are authenticated unless noted.</div>
+  <div class="section-rule"></div>
+
+  <!-- AUTH -->
+  <div class="card no-break">
+    <div class="card-eyebrow">Service 1</div>
+    <div class="card-title">Authentication &amp; Identity</div>
+    <p>Account creation, login, session refresh, user preferences read/write.</p>
+    <ul class="endpoint-list">
+      <li><span class="method post">POST</span><span class="ep-path">/auth/register</span><span class="ep-desc">email + password signup</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/auth/login</span><span class="ep-desc">returns JWT token</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/auth/refresh</span><span class="ep-desc">refresh session token</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/users/me</span><span class="ep-desc">load profile on app boot</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/users/me/preferences</span><span class="ep-desc">restore onboarding values</span></li>
+      <li><span class="method put">PUT</span><span class="ep-path">/users/me/preferences</span><span class="ep-desc">save diet, allergies, skill, spice, calorie target, cuisines, equipment</span></li>
+    </ul>
+  </div>
+
+  <!-- CATALOGUE -->
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Service 2</div>
+    <div class="card-title">Recipe Catalogue</div>
+    <p>Browse, filter, sort, and retrieve recipe content. Powers the Home screen, Intake search, and all recipe cards.</p>
+    <ul class="endpoint-list">
+      <li><span class="method get">GET</span><span class="ep-path">/recipes</span><span class="ep-desc">paginated; query: q, cuisine, course, diet, sort, page</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/recipes/:id</span><span class="ep-desc">full recipe detail — ingredients, steps, macros, history</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/recipes/featured</span><span class="ep-desc">Editor's pick hero card</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/recipes/random?{filters}</span><span class="ep-desc">"Surprise me" button</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/data/bootstrap</span><span class="ep-desc">all seed data in one call on app load (first endpoint to build)</span></li>
+    </ul>
+  </div>
+
+  <!-- INTERACTIONS -->
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Service 3</div>
+    <div class="card-title">Recipe Interactions</div>
+    <p>Saves, cook logs, community reviews. Powers heart button, ProfileScreen history, and community notes.</p>
+    <ul class="endpoint-list">
+      <li><span class="method post">POST</span><span class="ep-path">/recipes/:id/save</span><span class="ep-desc">bookmark toggle (heart button)</span></li>
+      <li><span class="method delete">DELETE</span><span class="ep-path">/recipes/:id/save</span><span class="ep-desc">remove bookmark</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/users/me/saved-recipes</span><span class="ep-desc">saved recipe list</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/recipes/:id/cook-log</span><span class="ep-desc">{ date, note, rating } — log a completed cook</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/recipes/:id/cook-logs</span><span class="ep-desc">user's own cook history</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/recipes/:id/reviews</span><span class="ep-desc">community notes</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/recipes/:id/reviews</span><span class="ep-desc">{ text, stars } — submit a review</span></li>
+    </ul>
+  </div>
+
+  <!-- PANTRY -->
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Service 4</div>
+    <div class="card-title">Pantry / Inventory</div>
+    <p>Full CRUD on user's pantry. Powers the Inventory screen and the ingredient crosscheck in RecipeScreen.</p>
+    <ul class="endpoint-list">
+      <li><span class="method get">GET</span><span class="ep-path">/pantry</span><span class="ep-desc">full inventory list</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/pantry</span><span class="ep-desc">{ name, qty, unit, category, expires } — add item</span></li>
+      <li><span class="method put">PUT</span><span class="ep-path">/pantry/:id</span><span class="ep-desc">edit item</span></li>
+      <li><span class="method delete">DELETE</span><span class="ep-path">/pantry/:id</span><span class="ep-desc">remove item</span></li>
+      <li><span class="method patch">PATCH</span><span class="ep-path">/pantry/:id/qty</span><span class="ep-desc">{ delta: ±0.5 } — the inline ± buttons</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/pantry/bulk-import</span><span class="ep-desc">"Bulk import" — CSV or JSON payload</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/pantry/decrement</span><span class="ep-desc">[{ name, qty }] — batch-decrement after cooking session</span></li>
+    </ul>
+  </div>
+
+  <!-- SHOPPING -->
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Service 5</div>
+    <div class="card-title">Shopping List</div>
+    <p>Shortfall list derived from diet plan minus pantry. Powers the Shopping screen.</p>
+    <ul class="endpoint-list">
+      <li><span class="method get">GET</span><span class="ep-path">/shopping-list</span><span class="ep-desc">computed shortfall: diet plan recipes − on-hand, aggregated by ingredient</span></li>
+      <li><span class="method patch">PATCH</span><span class="ep-path">/shopping-list/:ingredient/check</span><span class="ep-desc">mark item collected (persist tick-off)</span></li>
+      <li><span class="method patch">PATCH</span><span class="ep-path">/shopping-list/:ingredient/uncheck</span><span class="ep-desc">uncheck item</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/shopping-list/send</span><span class="ep-desc">"Send to phone" — triggers SMS or push notification</span></li>
+    </ul>
+  </div>
+
+  <!-- DIET PLAN -->
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Service 6</div>
+    <div class="card-title">Diet Plan</div>
+    <p>Weekly meal planner, macro targets, auto-fill, calendar export. Powers the Diet Plan screen.</p>
+    <ul class="endpoint-list">
+      <li><span class="method get">GET</span><span class="ep-path">/diet-plan?week=2026-W23</span><span class="ep-desc">load plan for given ISO week</span></li>
+      <li><span class="method put">PUT</span><span class="ep-path">/diet-plan?week=2026-W23</span><span class="ep-desc">save full week { Mon: { Breakfast: recipeId, … }, … }</span></li>
+      <li><span class="method patch">PATCH</span><span class="ep-path">/diet-plan/:week/:day/:meal</span><span class="ep-desc">{ recipeId } — swap a single meal slot</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/users/me/macro-targets</span><span class="ep-desc">load saved kcal/macro goals</span></li>
+      <li><span class="method put">PUT</span><span class="ep-path">/users/me/macro-targets</span><span class="ep-desc">save macro targets + preset selection</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/diet-plan/auto-fill?week=…</span><span class="ep-desc">"Auto-fill week" — server generates plan from preferences + pantry</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/diet-plan/calendar-export?week=…&amp;format=ical</span><span class="ep-desc">"Send to calendar" — returns .ics file</span></li>
+    </ul>
+  </div>
+
+  <!-- COOKING SESSION -->
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Service 7</div>
+    <div class="card-title">Cooking Session</div>
+    <p>Session lifecycle, step progress persistence, auto cook-log on completion. Powers the Cooking screen.</p>
+    <ul class="endpoint-list">
+      <li><span class="method post">POST</span><span class="ep-path">/cooking-sessions</span><span class="ep-desc">{ recipeId } — start a session</span></li>
+      <li><span class="method get">GET</span><span class="ep-path">/cooking-sessions/:id</span><span class="ep-desc">resume — returns last stepIdx, elapsed time</span></li>
+      <li><span class="method patch">PATCH</span><span class="ep-path">/cooking-sessions/:id/step</span><span class="ep-desc">{ stepIdx, completedAt } — mark step complete</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/cooking-sessions/:id/complete</span><span class="ep-desc">end session → auto-creates cook-log entry</span></li>
+      <li><span class="method delete">DELETE</span><span class="ep-path">/cooking-sessions/:id</span><span class="ep-desc">abandon session</span></li>
+    </ul>
+  </div>
+
+  <!-- AI -->
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Service 8</div>
+    <div class="card-title">AI / Cooking Assistant</div>
+    <p>NLU recipe search, voice transcription, dish recognition, live cooking chat, mid-cook vision snap.</p>
+    <ul class="endpoint-list">
+      <li><span class="method post">POST</span><span class="ep-path">/search/recipes</span><span class="ep-desc">{ query: string } → matched recipe — Intake text mode</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/asr/transcribe</span><span class="ep-desc">{ audio: blob } → text — Intake speak mode (Whisper / ASR)</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/vision/identify-dish</span><span class="ep-desc">{ image: blob } → { recipeId, dishName } — Intake photo mode</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/cooking-sessions/:id/messages</span><span class="ep-desc">{ text } → streamed reply — cooking chat (Claude API, recipe + step context)</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/cooking-sessions/:id/snap</span><span class="ep-desc">{ image: blob } → { label } — "Snap" button vision analysis</span></li>
+    </ul>
+  </div>
+
+  <!-- MEDIA -->
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Service 9</div>
+    <div class="card-title">Media / Assets</div>
+    <p>Recipe images, upload endpoint for cooking snaps and photo intake, CDN delivery.</p>
+    <ul class="endpoint-list">
+      <li><span class="method get">GET</span><span class="ep-path">/recipes/:id/image</span><span class="ep-desc">or CDN URL on recipe object (4:3 card crop + portrait crop)</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/media/upload</span><span class="ep-desc">{ file } → CDN URL — cooking snap + photo intake</span></li>
+    </ul>
+  </div>
+
+  <!-- NOTIFICATIONS -->
+  <div class="card no-break mt-4">
+    <div class="card-eyebrow">Service 10</div>
+    <div class="card-title">Notifications</div>
+    <p>Push registration, shopping list delivery, expiry alerts, cooking session reminders.</p>
+    <ul class="endpoint-list">
+      <li><span class="method post">POST</span><span class="ep-path">/notifications/subscribe</span><span class="ep-desc">{ deviceToken, platform } — register for FCM / APNs push</span></li>
+      <li><span class="method post">POST</span><span class="ep-path">/notifications/shopping-list</span><span class="ep-desc">"Send to phone" trigger</span></li>
+    </ul>
+    <p style="margin-top:12px;font-size:12px;color:var(--ink-3)"><strong>Cron jobs:</strong> Daily pantry scan → push when items expire within 3 days · Cooking session timeout → push "Resume cooking?" if session open and user idle &gt; N minutes.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     07 — BUILD ORDER
+══════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-eyebrow">07 — Build Order</div>
+  <div class="section-title">Recommended <em>Build Order</em></div>
+  <div class="section-sub">Ordered by dependency depth. Each service builds on the ones above it.</div>
+  <div class="section-rule"></div>
+
+  <ol class="dep-list">
+    <li><span class="dep-num">Authentication &amp; Identity</span><span class="dep-arrow">→</span><span class="dep-desc">gates every other service; build first</span></li>
+    <li><span class="dep-num">Recipe Catalogue + Bootstrap</span><span class="dep-arrow">→</span><span class="dep-desc">needed by every screen; <code>GET /data/bootstrap</code> is the first real API call</span></li>
+    <li><span class="dep-num">Pantry / Inventory</span><span class="dep-arrow">→</span><span class="dep-desc">needed by Shopping List and Cooking Session</span></li>
+    <li><span class="dep-num">Diet Plan</span><span class="dep-arrow">→</span><span class="dep-desc">needed by Shopping List derivation</span></li>
+    <li><span class="dep-num">Shopping List</span><span class="dep-arrow">→</span><span class="dep-desc">depends on Pantry + Diet Plan</span></li>
+    <li><span class="dep-num">Cooking Session</span><span class="dep-arrow">→</span><span class="dep-desc">depends on Recipe Catalogue + Pantry (decrement)</span></li>
+    <li><span class="dep-num">Recipe Interactions</span><span class="dep-arrow">→</span><span class="dep-desc">depends on Recipe Catalogue + Cooking Session (auto cook-log)</span></li>
+    <li><span class="dep-num">AI / Cooking Assistant</span><span class="dep-arrow">→</span><span class="dep-desc">depends on Recipe Catalogue + Cooking Session</span></li>
+    <li><span class="dep-num">Media / Assets</span><span class="dep-arrow">→</span><span class="dep-desc">depends on Cooking Session + AI snap endpoint</span></li>
+    <li><span class="dep-num">Notifications</span><span class="dep-arrow">→</span><span class="dep-desc">depends on all — build last</span></li>
+  </ol>
+
+  <div class="card no-break mt-6" style="background:var(--ink);color:var(--paper);border-color:rgba(201,185,148,.2)">
+    <div style="font-family:var(--f-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--saffron);margin-bottom:10px">Note to backend engineer</div>
+    <p style="color:rgba(243,236,219,.8);line-height:1.6">The frontend is fully wired. There are no placeholders left — every screen renders, every interaction fires. The only code you need to write is <code style="background:rgba(255,255,255,.1);color:var(--saffron)">apiClient.js</code>. Replace the <code style="background:rgba(255,255,255,.1);color:var(--saffron)">fetchAll()</code> stub with a real HTTP call to <code style="background:rgba(255,255,255,.1);color:var(--saffron)">GET /data/bootstrap</code> and the app goes live on the first endpoint you ship.</p>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   IcFlame, IcHeart, IcClock, IcEdit, IcCheck,
   StarRow,
 } from '../shared/Icons.jsx';
 import { PageHeader, Slider, ChipToggle, Stamp, ImageSlot } from '../shared/Shell.jsx';
+import { get, put } from '../../services/apiClient.js';
+import { parsePreferences } from '../../layers/L3_composite/authOps.js';
 
 // ─────────────────────── ProfStat ─────────────── START ──────────────────
 // calls:     none (presentational)
@@ -145,11 +147,43 @@ export function ProfileScreen({ recipe, cuisines }) {
 // ─────────────────────── ProfileScreen ─────────────── END ────────────────────
 
 // ─────────────────────── OnboardingScreen ─────────────── START ──────────────────
-// calls:     none (self-contained UI with local pref state)
+// calls:     apiClient: get, put
+//            L3/authOps: parsePreferences
 // called by: L1/App
 export function OnboardingScreen({ cuisines }) {
-  const [pref, setPref] = useState({ diet: "Non-Veg", allergies: [], skill: "Comfortable", targetKcal: 2100, spice: 5, cuisines: ["indian", "italian"], cookFreq: 4 });
+  const IS_LOCAL = import.meta.env.VITE_APP_ENV === 'dev_local';
+
+  const [pref,    setPref]    = useState({ diet: "Non-Veg", allergies: [], skill: "Comfortable", targetKcal: 2100, spice: 5, cuisines: ["indian", "italian"], cookFreq: 4 });
+  const [saving,  setSaving]  = useState(false);
+  const [saved,   setSaved]   = useState(false);
+  const [saveErr, setSaveErr] = useState(null);
+
+  // Load saved preferences from API on mount (not in dev_local)
+  useEffect(() => {
+    if (IS_LOCAL) return;
+    get('/users/me/preferences')
+      .then(raw => {
+        const p = parsePreferences(raw);
+        if (p) setPref(p);
+      })
+      .catch(() => {});
+  }, [IS_LOCAL]);
+
   const tog = (k, v) => setPref({ ...pref, [k]: pref[k].includes(v) ? pref[k].filter(x => x !== v) : [...pref[k], v] });
+
+  const savePreferences = async () => {
+    if (IS_LOCAL) { setSaved(true); setTimeout(() => setSaved(false), 2000); return; }
+    setSaving(true); setSaveErr(null);
+    try {
+      await put('/users/me/preferences', pref);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch (err) {
+      setSaveErr(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const Section = ({ n, title, children }) => (
     <div className="card" style={{ padding: 24, display: "grid", gridTemplateColumns: "48px 1fr", gap: 18 }}>
@@ -196,9 +230,16 @@ export function OnboardingScreen({ cuisines }) {
             {["Gas range","Induction","Oven","Pressure cooker","Air fryer","Wok","Cast iron","Stand mixer"].map(k => <ChipToggle key={k}>{k}</ChipToggle>)}
           </div>
         </Section>
+        {saveErr && (
+          <div style={{ padding: "10px 14px", background: "hsl(0 60% 96%)", border: "1px solid hsl(0 60% 88%)", borderRadius: 6, fontSize: 13, color: "hsl(0 60% 40%)" }}>
+            {saveErr}
+          </div>
+        )}
         <div className="row gap-2 mt-4" style={{ justifyContent: "flex-end" }}>
-          <button className="btn btn-ghost">Skip for now</button>
-          <button className="btn btn-brick btn-lg">Save preferences <IcCheck size={14}/></button>
+          <button className="btn btn-ghost" disabled={saving}>Skip for now</button>
+          <button className="btn btn-brick btn-lg" onClick={savePreferences} disabled={saving} style={{ opacity: saving ? .6 : 1 }}>
+            {saving ? 'Saving…' : saved ? <>Saved <IcCheck size={14}/></> : <>Save preferences <IcCheck size={14}/></>}
+          </button>
         </div>
       </div>
     </div>
