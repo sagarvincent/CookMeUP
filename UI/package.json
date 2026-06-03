@@ -1,0 +1,22 @@
+{
+  "name": "mise-and-plate",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev":           "vite --mode dev_local",
+    "dev:local":     "vite --mode dev_local",
+    "dev:cluster":   "vite --mode dev_cluster",
+    "build":         "vite build --mode production",
+    "build:cluster": "vite build --mode dev_cluster",
+    "preview":       "vite preview"
+  },
+  "dependencies": {
+    "react":     "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite":                 "^5.4.0"
+  }
+}

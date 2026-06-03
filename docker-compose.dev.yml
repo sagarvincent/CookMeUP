@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./UI
+      dockerfile: Dockerfile
+      target: builder
+    working_dir: /app
+    command: npm run dev:local -- --host 0.0.0.0
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./UI/src:/app/src
+      - /app/node_modules
+    environment:
+      - VITE_APP_ENV=dev_local
