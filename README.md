@@ -45,10 +45,11 @@ cd UI       && npm run dev:cluster                # frontend on :5173
 | Recipe Catalogue | `API/recipes/` | 3002 | ✅ Built |
 | Pantry / Inventory | `API/pantry/` | 3003 | ✅ Built |
 | Diet Plan | `API/diet-plan/` | 3004 | ✅ Built |
+| Shopping List | `API/shopping-list/` | 3005 | ✅ Built |
 
 **Stack:** Node.js · Express · SQLite (`better-sqlite3`) · JWT HS256 · bcrypt
 
-**Databases:** `Databases/Auth/init.sql` · `Databases/Profile/init.sql` · `Databases/Recipes/init.sql` · `Databases/Pantry/init.sql` · `Databases/DietPlan/init.sql`
+**Databases:** `Databases/Auth/init.sql` · `Databases/Profile/init.sql` · `Databases/Recipes/init.sql` · `Databases/Pantry/init.sql` · `Databases/DietPlan/init.sql` · `Databases/ShoppingList/init.sql`
 
 **Demo credentials:** `demo@mise-and-plate.com` / `password123`
 
@@ -119,6 +120,26 @@ All endpoints require Bearer token — plans are per-user.
 **Auto-fill** calls the recipes service (`RECIPES_API_BASE` env) to fetch a pool of recipes matching the given filters, then randomly assigns them to empty slots.
 
 See `API/diet-plan/.env.example` for environment variables. `ACCESS_TOKEN_SECRET` must match the auth service.
+
+### Shopping List endpoints (`API/shopping-list/` · port 3005)
+
+All endpoints require Bearer token.
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/shopping-list?week=2026-W23` | Compute shortfall (diet plan − pantry), merged with check state. `week` defaults to current ISO week. |
+| PATCH | `/shopping-list/:ingredient/check` | Tick an ingredient. Body: `{ week }` |
+| PATCH | `/shopping-list/:ingredient/uncheck` | Untick an ingredient. Body: `{ week }` |
+| POST | `/shopping-list/send` | Queue "send to phone" (stub — wired to Notifications service #10). Body: `{ week }` |
+
+**Computation:** fetches diet plan → collects recipe IDs → fetches all recipes → aggregates ingredient quantities (same recipe in multiple slots multiplies quantities) → subtracts matching pantry quantities (case-insensitive name + exact unit match) → returns only items with shortfall > 0.
+
+**Response shape:**
+```json
+{ "week": "2026-W23", "items": [{ "name": "Chicken thighs", "neededQty": 1200, "unit": "g", "onHandQty": 400, "shortfallQty": 800, "checked": false, "category": "Proteins" }], "allChecked": false }
+```
+
+See `API/shopping-list/.env.example` for environment variables.
 
 ---
 

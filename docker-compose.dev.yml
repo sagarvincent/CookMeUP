@@ -86,8 +86,30 @@ services:
     depends_on:
       - recipes
 
+  shopping-list:
+    build:
+      context: ./API/shopping-list
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./API/shopping-list/src:/app/src
+      - shopping_list_data:/app/data
+    environment:
+      - PORT=3005
+      - NODE_ENV=development
+      - ACCESS_TOKEN_SECRET=dev_access_secret_change_me
+      - CORS_ORIGIN=http://localhost:5173
+      - DIET_PLAN_API_BASE=http://diet-plan:3004
+      - RECIPES_API_BASE=http://recipes:3002
+      - PANTRY_API_BASE=http://pantry:3003
+    depends_on:
+      - diet-plan
+      - pantry
+
 volumes:
   auth_data:
   recipes_data:
   pantry_data:
   diet_plan_data:
+  shopping_list_data:
