@@ -1,1 +1,6 @@
-design_handoff_recipe_app
+node_modules/
+dist/
+.env.dev_local
+.env.dev_cluster
+.env.production
+*.local
